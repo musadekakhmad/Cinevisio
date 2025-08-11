@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cine Visio | Free HD Movie & TV Show Streaming</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- This will be your external ad config file -->
+    <!-- Ini akan menjadi file konfigurasi iklan eksternal Anda -->
     <script src="config.js" defer></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
@@ -105,9 +105,9 @@
             clickCount: 0
         };
 
-        // --- AD LOGIC ---
+        // --- LOGIKA IKLAN ---
         function showAd() {
-            console.log('Displaying Adterra ad...');
+            console.log('Menampilkan iklan Adsterra...');
             if (window.ADSTERRA_DIRECT_LINKS && window.ADSTERRA_DIRECT_LINKS.length > 0) {
                 const adLinks = window.ADSTERRA_DIRECT_LINKS;
                 const randomIndex = Math.floor(Math.random() * adLinks.length);
@@ -123,7 +123,7 @@
             }
         });
 
-        // --- API HELPERS ---
+        // --- PEMBANTU API ---
         async function fetchData(url) {
             try {
                 const response = await fetch(url);
@@ -135,7 +135,7 @@
             }
         }
 
-        // --- UTILS ---
+        // --- UTILITAS ---
         function createSlug(title) {
             if (!title) return '';
             return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -152,12 +152,13 @@
             metaDesc.content = description;
         }
 
+        // Fungsi ini menggunakan history.pushState untuk mengelola URL tanpa memuat ulang halaman.
         function navigateTo(path) {
             history.pushState(null, '', path);
             router();
         }
 
-        // --- COMPONENTS (as functions returning HTML strings) ---
+        // --- KOMPONEN (sebagai fungsi yang mengembalikan string HTML) ---
 
         function Header() {
             return `
@@ -169,8 +170,9 @@
                         <span class="rainbow-text-header text-3xl md:text-4xl">Cine Visio</span>
                       </a>
                       <div class="flex items-center space-x-4">
-                        <a href="/movies" data-nav-link class="text-white px-2 py-0.5 rounded-full hover:bg-blue-600 hover:text-white transition-colors duration-300">Movies</a>
-                        <a href="/tv" data-nav-link class="text-white px-2 py-0.5 rounded-full hover:bg-red-600 hover:text-white transition-colors duration-300">TV Shows</a>
+                        <!-- Tautan diperbarui untuk menghindari konflik dengan rute dinamis baru -->
+                        <a href="/list/movies" data-nav-link class="text-white px-2 py-0.5 rounded-full hover:bg-blue-600 hover:text-white transition-colors duration-300">Movies</a>
+                        <a href="/list/tv" data-nav-link class="text-white px-2 py-0.5 rounded-full hover:bg-red-600 hover:text-white transition-colors duration-300">TV Shows</a>
                         <form id="search-form" class="flex items-center">
                           <input id="search-input" type="text" placeholder="Search..." class="px-3 py-1 text-sm rounded-l-full bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-40 md:w-auto"/>
                           <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-r-full shadow-lg transition-colors duration-300" aria-label="Search">
@@ -234,10 +236,10 @@
             `;
         }
 
-        // --- PAGES ---
+        // --- HALAMAN ---
 
         async function HomePage() {
-            updateMeta('Cine Visio | Free HD Movie & TV Show Streaming', 'Watch the latest movies and trending TV shows for free on Cine Visio.');
+            updateMeta('Cine Visio | Free HD Movie & TV Show Streaming', 'Tonton film terbaru dan acara TV trending secara gratis di Cine Visio.');
             const carouselData = await fetchData(`${BASE_URL}/movie/now_playing?language=en-US&page=1`);
             
             let carouselHtml = '<div class="flex justify-center items-center h-64"><div class="loading-spinner"></div></div>';
@@ -251,7 +253,8 @@
                           <div class="carousel-content text-white">
                             <h2 class="text-4xl font-bold mb-4">${movie.title}</h2>
                             <p class="text-lg mb-6 line-clamp-3">${movie.overview}</p>
-                            <a href="/details/movie/${movie.id}/${createSlug(movie.title)}" data-nav-link class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300 shadow-lg inline-flex items-center justify-center">Learn More</a>
+                            <!-- Tautan diperbarui -->
+                            <a href="/movie/${movie.id}/${createSlug(movie.title)}" data-nav-link class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300 shadow-lg inline-flex items-center justify-center">Learn More</a>
                           </div>
                         </div>
                       `).join('')}
@@ -267,14 +270,14 @@
                     ${carouselHtml}
                     <div class="bg-gray-800 rounded-lg p-6 shadow-lg mb-8 mt-8">
                       <h1 class="text-3xl font-bold text-white mb-4">Cine Visio: Free HD Movie & TV Show Streaming</h1>
-                      <p class="text-gray-300 text-justify">Cine Visio is your ultimate destination for free high-quality movie and TV show streaming. Explore our extensive collection of popular movies, trending films, and the most talked-about TV series. With an easy-to-use interface and a seamless video player, we ensure a delightful viewing experience. Start streaming today!</p>
+                      <p class="text-gray-300 text-justify">Cine Visio adalah tujuan utama Anda untuk streaming film dan acara TV berkualitas tinggi secara gratis. Jelajahi koleksi ekstensif film-film populer, film-film trending, dan serial TV yang paling banyak dibicarakan. Dengan antarmuka yang mudah digunakan dan pemutar video yang lancar, kami memastikan pengalaman menonton yang menyenangkan. Mulai streaming hari ini!</p>
                     </div>
                 </main>
             `;
         }
         
         async function MoviePage() {
-            updateMeta('Movies | Cine Visio', 'Explore popular, now playing, upcoming, and top-rated movies on Cine Visio.');
+            updateMeta('Movies | Cine Visio', 'Jelajahi film populer, yang sedang tayang, akan datang, dan berperingkat teratas di Cine Visio.');
             const popular = await MediaSection('Popular Movies', `${BASE_URL}/movie/popular?language=en-US`, 'movie');
             const nowPlaying = await MediaSection('Now Playing', `${BASE_URL}/movie/now_playing?language=en-US`, 'movie');
             const upcoming = await MediaSection('Upcoming', `${BASE_URL}/movie/upcoming?language=en-US`, 'movie');
@@ -283,7 +286,7 @@
         }
 
         async function TvPage() {
-            updateMeta('TV Series | Cine Visio', 'Discover popular, airing today, on the air, and top-rated TV series on Cine Visio.');
+            updateMeta('TV Series | Cine Visio', 'Temukan serial TV populer, tayang hari ini, sedang tayang, dan berperingkat teratas di Cine Visio.');
             const popular = await MediaSection('Popular TV Series', `${BASE_URL}/tv/popular?language=en-US`, 'tv');
             const airingToday = await MediaSection('Airing Today', `${BASE_URL}/tv/airing_today?language=en-US`, 'tv');
             const onTheAir = await MediaSection('Currently on TV', `${BASE_URL}/tv/on_the_air?language=en-US`, 'tv');
@@ -362,6 +365,7 @@
                   </div>
                   ` : ''}
                    <div class="mt-8 text-center">
+                       <!-- Tautan diperbarui -->
                        <a href="/stream/${mediaType}/${mediaId}/${createSlug(media.title || media.name)}" data-nav-link class="watch-now-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300 shadow-lg inline-flex items-center justify-center">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.106a1 1 0 010 1.788l-7.243 4.385A1 1 0 016 16.31V7.69a1 1 0 011.509-.875l7.243 4.385z" /></svg>
                            Watch Now
@@ -373,7 +377,7 @@
 
         async function StreamingPage(params) {
             const { mediaType, mediaId, mediaTitleSlug } = params;
-            updateMeta(`Streaming ${mediaTitleSlug.replace(/-/g, ' ')}`, `Watch ${mediaTitleSlug.replace(/-/g, ' ')} for free on Cine Visio.`);
+            updateMeta(`Streaming ${mediaTitleSlug.replace(/-/g, ' ')}`, `Tonton ${mediaTitleSlug.replace(/-/g, ' ')} secara gratis di Cine Visio.`);
             
             const romanceData = await fetchData(`${BASE_URL}/discover/movie?with_genres=10749`);
             let romanceHtml = '<div class="loading-spinner"></div>';
@@ -391,7 +395,8 @@
             return `
                 <div class="w-full min-h-screen bg-gray-900 p-4 pt-20">
                   <div class="container mx-auto px-4 py-8 max-w-7xl">
-                    <a href="/details/${mediaType}/${mediaId}/${mediaTitleSlug}" data-nav-link class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300 mb-6 inline-flex items-center">
+                    <!-- Tautan diperbarui -->
+                    <a href="/${mediaType}/${mediaId}/${mediaTitleSlug}" data-nav-link class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300 mb-6 inline-flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                       Back to Details
                     </a>
@@ -418,7 +423,7 @@
 
         async function SearchPage(params) {
              const { query } = params;
-             updateMeta(`Search results for ${query}`, `Find movies and TV shows for "${query}".`);
+             updateMeta(`Search results for ${query}`, `Temukan film dan acara TV untuk "${query}".`);
              const data = await fetchData(`${BASE_URL}/search/multi?query=${encodeURIComponent(query)}`);
              if (!data || !data.results) return `<p class="text-center text-red-500 text-lg">No results found.</p>`;
              
@@ -437,7 +442,7 @@
         async function GenrePage(params) {
              const { genreId, genreName } = params;
              const decodedGenreName = decodeURIComponent(genreName);
-             updateMeta(`Genre: ${decodedGenreName}`, `Find movies in the ${decodedGenreName} genre.`);
+             updateMeta(`Genre: ${decodedGenreName}`, `Temukan film dalam genre ${decodedGenreName}.`);
              
              // Fetch the first page of movies
              const data = await fetchData(`${BASE_URL}/discover/movie?with_genres=${genreId}&page=1`);
@@ -473,9 +478,11 @@
         // --- ROUTER ---
         const routes = {
             '/': HomePage,
-            '/movies': MoviePage,
-            '/tv': TvPage,
-            '/details/:mediaType/:mediaId/:mediaTitleSlug': DetailsPage,
+            // Mengubah rute untuk halaman daftar film/tv agar tidak berkonflik dengan rute detail baru
+            '/list/movies': MoviePage,
+            '/list/tv': TvPage,
+            // Rute baru untuk detail yang tidak lagi memiliki "details"
+            '/:mediaType/:mediaId/:mediaTitleSlug': DetailsPage,
             '/stream/:mediaType/:mediaId/:mediaTitleSlug': StreamingPage,
             '/search/:query': SearchPage,
             '/genre/:genreId/:genreName': GenrePage,
@@ -488,7 +495,7 @@
             let page = null;
             let params = {};
 
-            // Match dynamic routes
+            // Mencocokkan rute dinamis
             for (const route in routes) {
                 const routeParts = route.split('/').filter(p => p);
                 if (routeParts.length === parts.length) {
@@ -510,19 +517,19 @@
                 }
             }
             
-            // Match static routes if no dynamic route was found
+            // Mencocokkan rute statis jika tidak ada rute dinamis yang ditemukan
             if (!page) {
-                page = routes[path] || routes['/']; // Fallback to home
+                page = routes[path] || routes['/']; // Kembali ke beranda
             }
 
-            app.innerHTML = `<div class="loading-spinner my-20"></div>`; // Show loader
+            app.innerHTML = `<div class="loading-spinner my-20"></div>`; // Tampilkan pemuat
             const pageContent = await page(params);
             app.innerHTML = Header() + pageContent + Footer();
             addEventListeners();
         }
         
         function addEventListeners() {
-            // Event listener for all internal navigation links
+            // Event listener untuk semua tautan navigasi internal
             document.querySelectorAll('a[data-nav-link]').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -531,7 +538,7 @@
                 });
             });
 
-            // Search form
+            // Form pencarian
             const searchForm = document.getElementById('search-form');
             if(searchForm) {
                 searchForm.addEventListener('submit', e => {
@@ -544,15 +551,16 @@
                 });
             }
 
-            // Movie cards
+            // Kartu film
             document.querySelectorAll('.movie-card').forEach(card => {
                 card.addEventListener('click', () => {
                     const { id, type, slug } = card.dataset;
-                    navigateTo(`/details/${type}/${id}/${slug}`);
+                    // Tautan diperbarui
+                    navigateTo(`/${type}/${id}/${slug}`);
                 });
             });
             
-            // Stream buttons
+            // Tombol streaming
             document.querySelectorAll('.stream-btn').forEach(button => {
                 button.addEventListener('click', (e) => {
                     const { source, type, id } = e.target.dataset;
@@ -569,7 +577,7 @@
                     if (iframe) iframe.src = streamUrl;
                     if (notice) notice.style.display = 'none';
 
-                    // Update button styles
+                    // Perbarui gaya tombol
                     document.querySelectorAll('.stream-btn').forEach(btn => {
                         btn.classList.remove('bg-blue-600', 'text-white');
                         btn.classList.add('bg-gray-700', 'text-gray-300');
@@ -607,7 +615,7 @@
                 }, 5000);
             }
 
-            // Load More button for GenrePage
+            // Tombol 'Load More' untuk GenrePage
             const loadMoreBtn = document.getElementById('load-more-btn');
             if (loadMoreBtn) {
                 loadMoreBtn.addEventListener('click', async () => {
@@ -633,18 +641,21 @@
                         loadMoreBtn.disabled = true;
                     }
 
-                    // Re-attach event listeners to the newly added movie cards
+                    // Pasang kembali event listener ke kartu film yang baru ditambahkan
                     document.querySelectorAll('.movie-card').forEach(card => {
                         card.addEventListener('click', () => {
                             const { id, type, slug } = card.dataset;
-                            navigateTo(`/details/${type}/${id}/${slug}`);
+                            navigateTo(`/${type}/${id}/${slug}`);
                         });
                     });
                 });
             }
         }
 
-        window.addEventListener('popstate', router); // Listen for back/forward button clicks
+        // Ini adalah bagian penting yang menangani navigasi pushState.
+        // Dengarkan klik tombol kembali/maju
+        window.addEventListener('popstate', router);
+        // Jalankan router saat halaman pertama kali dimuat
         window.addEventListener('DOMContentLoaded', router);
 
     </script>
