@@ -536,7 +536,9 @@
             document.querySelectorAll('a[data-nav-link]').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const path = e.target.getAttribute('href');
+                    // Menggunakan e.currentTarget untuk memastikan kita selalu mendapatkan elemen <a>
+                    const path = e.currentTarget.getAttribute('href');
+                    console.log(`Navigating to: ${path}`);
                     navigateTo(path);
                 });
             });
