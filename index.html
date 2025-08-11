@@ -167,13 +167,11 @@
                 <header class="bg-gray-800 shadow-md sticky top-0 z-50">
                   <div class="container mx-auto px-4 max-w-7xl">
                     <nav class="p-4 flex flex-col md:flex-row justify-between items-center">
-                      <!-- MENGHAPUS 'data-nav-link' di sini agar tautan ini berfungsi seperti tautan HTML normal dan me-refresh halaman -->
                       <a href="/" class="flex items-center mb-4 md:mb-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-400 mr-3" viewBox="0 0 24 24" fill="currentColor"><path d="M18 3H6c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM6 5h12v14H6V5zm10 12h-2v-2h2v2zM8 7h2v2H8V7zm0 4h2v2H8v-2zm0 4h2v2H8v-2zm4-4h2v2h-2v-2zm0 4h2v2h-2v-2zm4-4h2v2h-2v-2z"/></svg>
                         <span class="rainbow-text-header text-3xl md:text-4xl">Cine Visio</span>
                       </a>
                       <div class="flex items-center space-x-4">
-                        <!-- Tautan diperbarui untuk menghindari konflik dengan rute dinamis baru -->
                         <a href="/list/movies" data-nav-link class="text-white px-2 py-0.5 rounded-full hover:bg-blue-600 hover:text-white transition-colors duration-300">Movies</a>
                         <a href="/list/tv" data-nav-link class="text-white px-2 py-0.5 rounded-full hover:bg-red-600 hover:text-white transition-colors duration-300">TV Shows</a>
                         <form id="search-form" class="flex items-center">
@@ -256,7 +254,6 @@
                           <div class="carousel-content text-white">
                             <h2 class="text-4xl font-bold mb-4">${movie.title}</h2>
                             <p class="text-lg mb-6 line-clamp-3">${movie.overview}</p>
-                            <!-- Tautan diperbarui -->
                             <a href="/movie/${movie.id}/${createSlug(movie.title)}" data-nav-link class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300 shadow-lg inline-flex items-center justify-center">Learn More</a>
                           </div>
                         </div>
@@ -368,7 +365,6 @@
                   </div>
                   ` : ''}
                    <div class="mt-8 text-center">
-                       <!-- Tautan diperbarui -->
                        <a href="/stream/${mediaType}/${mediaId}/${createSlug(media.title || media.name)}" data-nav-link class="watch-now-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300 shadow-lg inline-flex items-center justify-center">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.106a1 1 0 010 1.788l-7.243 4.385A1 1 0 016 16.31V7.69a1 1 0 011.509-.875l7.243 4.385z" /></svg>
                            Watch Now
@@ -398,7 +394,6 @@
             return `
                 <div class="w-full min-h-screen bg-gray-900 p-4 pt-20">
                   <div class="container mx-auto px-4 py-8 max-w-7xl">
-                    <!-- Tautan diperbarui -->
                     <a href="/${mediaType}/${mediaId}/${mediaTitleSlug}" data-nav-link class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300 mb-6 inline-flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                       Back to Details
@@ -447,24 +442,24 @@
              const decodedGenreName = decodeURIComponent(genreName);
              updateMeta(`Genre: ${decodedGenreName}`, `Temukan film dalam genre ${decodedGenreName}.`);
              
-             // Fetch the first page of movies
+             // Ambil halaman pertama film
              const data = await fetchData(`${BASE_URL}/discover/movie?with_genres=${genreId}&page=1`);
-             if (!data || !data.results) return `<p class="text-center text-red-500 text-lg">No movies found for this genre.</p>`;
+             if (!data || !data.results) return `<p class="text-center text-red-500 text-lg">Tidak ada film yang ditemukan untuk genre ini.</p>`;
              
              const content = data.results.filter(item => item.poster_path);
              const totalPages = data.total_pages;
 
              let buttonHtml = '';
+             // Hanya tampilkan tombol "Load More" jika ada lebih dari 1 halaman
              if (totalPages > 1) {
                 buttonHtml = `
                     <div class="text-center mt-8">
                         <button id="load-more-btn" data-genre-id="${genreId}" data-next-page="2" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300 shadow-lg inline-flex items-center justify-center">
-                            Load More
+                            Muat Lebih Banyak
                         </button>
                     </div>
                 `;
              }
-             
 
              return `
                 <main class="container mx-auto px-4 py-8 max-w-7xl">
@@ -481,10 +476,8 @@
         // --- ROUTER ---
         const routes = {
             '/': HomePage,
-            // Mengubah rute untuk halaman daftar film/tv agar tidak berkonflik dengan rute detail baru
             '/list/movies': MoviePage,
             '/list/tv': TvPage,
-            // Rute baru untuk detail yang tidak lagi memiliki "details"
             '/:mediaType/:mediaId/:mediaTitleSlug': DetailsPage,
             '/stream/:mediaType/:mediaId/:mediaTitleSlug': StreamingPage,
             '/search/:query': SearchPage,
@@ -560,7 +553,6 @@
             document.querySelectorAll('.movie-card').forEach(card => {
                 card.addEventListener('click', () => {
                     const { id, type, slug } = card.dataset;
-                    // Tautan diperbarui
                     navigateTo(`/${type}/${id}/${slug}`);
                 });
             });
@@ -627,22 +619,28 @@
                     const genreId = loadMoreBtn.dataset.genreId;
                     let nextPage = parseInt(loadMoreBtn.dataset.nextPage, 10);
                     
+                    // Tampilkan spinner dan nonaktifkan tombol selama proses pemuatan
                     loadMoreBtn.innerHTML = `<div class="loading-spinner w-6 h-6"></div>`;
                     loadMoreBtn.disabled = true;
 
+                    // Lakukan panggilan API untuk halaman berikutnya
                     const data = await fetchData(`${BASE_URL}/discover/movie?with_genres=${genreId}&page=${nextPage}`);
                     
                     if (data && data.results && data.results.length > 0) {
                         const movieGrid = document.getElementById('movie-grid');
                         const newMovies = data.results.filter(item => item.poster_path);
                         const newHtml = newMovies.map(item => MovieCard(item, 'movie')).join('');
+                        
+                        // Sisipkan film baru ke dalam grid
                         movieGrid.insertAdjacentHTML('beforeend', newHtml);
                         
+                        // Perbarui nomor halaman untuk panggilan berikutnya
                         loadMoreBtn.dataset.nextPage = nextPage + 1;
-                        loadMoreBtn.innerHTML = 'Load More';
+                        loadMoreBtn.innerHTML = 'Muat Lebih Banyak';
                         loadMoreBtn.disabled = false;
                     } else {
-                        loadMoreBtn.innerHTML = 'No More Movies';
+                        // Jika tidak ada lagi film, ubah teks tombol
+                        loadMoreBtn.innerHTML = 'Tidak Ada Lagi Film';
                         loadMoreBtn.disabled = true;
                     }
 
