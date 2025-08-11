@@ -236,6 +236,20 @@
                 </div>
             `;
         }
+        
+        function NotFoundPage() {
+            updateMeta('Halaman Tidak Ditemukan', 'Halaman yang Anda cari tidak ada.');
+            return `
+                <main class="container mx-auto px-4 py-8 max-w-7xl text-center">
+                    <h1 class="text-5xl font-bold text-white mb-4">404</h1>
+                    <p class="text-2xl text-gray-400 mb-8">Maaf, halaman yang Anda cari tidak ditemukan.</p>
+                    <a href="/" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300 shadow-lg inline-flex items-center justify-center">
+                        Kembali ke Beranda
+                    </a>
+                </main>
+            `;
+        }
+
 
         // --- HALAMAN ---
 
@@ -478,44 +492,69 @@
             '/': HomePage,
             '/list/movies': MoviePage,
             '/list/tv': TvPage,
-            '/:mediaType/:mediaId/:mediaTitleSlug': DetailsPage,
-            '/stream/:mediaType/:mediaId/:mediaTitleSlug': StreamingPage,
-            '/search/:query': SearchPage,
-            '/genre/:genreId/:genreName': GenrePage,
         };
+
+        // Fungsi ini memeriksa apakah sebuah path cocok dengan pola dinamis
+        function matchDynamicRoute(path, pattern) {
+            const pathParts = path.split('/').filter(p => p);
+            const patternParts = pattern.split('/').filter(p => p);
+
+            if (pathParts.length !== patternParts.length) {
+                return null;
+            }
+
+            const params = {};
+            for (let i = 0; i < patternParts.length; i++) {
+                if (patternParts[i].startsWith(':')) {
+                    params[patternParts[i].substring(1)] = pathParts[i];
+                } else if (patternParts[i] !== pathParts[i]) {
+                    return null;
+                }
+            }
+            return params;
+        }
 
         async function router() {
             const path = window.location.pathname;
-            const parts = path.split('/').filter(p => p);
             
             let page = null;
             let params = {};
 
-            // Mencocokkan rute dinamis
-            for (const route in routes) {
-                const routeParts = route.split('/').filter(p => p);
-                if (routeParts.length === parts.length) {
-                    let match = true;
-                    let tempParams = {};
-                    for (let i = 0; i < routeParts.length; i++) {
-                        if (routeParts[i].startsWith(':')) {
-                            tempParams[routeParts[i].substring(1)] = parts[i];
-                        } else if (routeParts[i] !== parts[i]) {
-                            match = false;
-                            break;
-                        }
-                    }
-                    if (match) {
-                        page = routes[route];
-                        params = tempParams;
-                        break;
-                    }
+            // Prioritaskan rute statis
+            if (routes[path]) {
+                page = routes[path];
+            } else if (path.startsWith('/genre/')) {
+                // Tangani rute genre secara spesifik
+                const dynamicParams = matchDynamicRoute(path, '/genre/:genreId/:genreName');
+                if (dynamicParams) {
+                    page = GenrePage;
+                    params = dynamicParams;
+                }
+            } else if (path.startsWith('/search/')) {
+                // Tangani rute pencarian secara spesifik
+                const dynamicParams = matchDynamicRoute(path, '/search/:query');
+                if (dynamicParams) {
+                    page = SearchPage;
+                    params = dynamicParams;
+                }
+            } else if (path.startsWith('/stream/')) {
+                // Tangani rute streaming
+                const dynamicParams = matchDynamicRoute(path, '/stream/:mediaType/:mediaId/:mediaTitleSlug');
+                if (dynamicParams) {
+                    page = StreamingPage;
+                    params = dynamicParams;
+                }
+            } else {
+                 // Tangani rute detail film sebagai rute dinamis terakhir
+                const dynamicParams = matchDynamicRoute(path, '/:mediaType/:mediaId/:mediaTitleSlug');
+                if (dynamicParams) {
+                    page = DetailsPage;
+                    params = dynamicParams;
                 }
             }
             
-            // Mencocokkan rute statis jika tidak ada rute dinamis yang ditemukan
             if (!page) {
-                page = routes[path] || routes['/']; // Kembali ke beranda
+                page = NotFoundPage;
             }
 
             app.innerHTML = `<div class="loading-spinner my-20"></div>`; // Tampilkan pemuat
