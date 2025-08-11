@@ -1,0 +1,8 @@
+# Aturan untuk aplikasi Movies
+/movies/* /movies/index.html 200
+
+# Aturan untuk aplikasi TV Series
+/tvseries/* /tvseries/index.html 200
+
+# Aturan untuk halaman root (opsional, jika Anda ingin semua non-file mengarah ke root index.html)
+# /* /index.html 200
