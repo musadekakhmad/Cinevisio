@@ -1,0 +1,6 @@
+# Sembunyikan bagian admin (jika ada) dan perbolehkan semua bot lainnya
+User-agent: *
+Allow: /
+
+# Menunjuk ke lokasi sitemap Anda
+Sitemap: https://cinevisio.netlify.app/sitemap.xml
