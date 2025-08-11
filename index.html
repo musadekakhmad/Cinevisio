@@ -458,7 +458,7 @@
              
              // Ambil halaman pertama film
              const data = await fetchData(`${BASE_URL}/discover/movie?with_genres=${genreId}&page=1`);
-             if (!data || !data.results) return `<p class="text-center text-red-500 text-lg">Tidak ada film yang ditemukan untuk genre ini.</p>`;
+             if (!data || !data.results) return `<p class="text-center text-red-500 text-lg">No movies found for this genre.</p>`;
              
              const content = data.results.filter(item => item.poster_path);
              const totalPages = data.total_pages;
@@ -469,7 +469,7 @@
                 buttonHtml = `
                     <div class="text-center mt-8">
                         <button id="load-more-btn" data-genre-id="${genreId}" data-next-page="2" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300 shadow-lg inline-flex items-center justify-center">
-                            Muat Lebih Banyak
+                            Load More
                         </button>
                     </div>
                 `;
@@ -675,11 +675,11 @@
                         
                         // Perbarui nomor halaman untuk panggilan berikutnya
                         loadMoreBtn.dataset.nextPage = nextPage + 1;
-                        loadMoreBtn.innerHTML = 'Muat Lebih Banyak';
+                        loadMoreBtn.innerHTML = 'Load More';
                         loadMoreBtn.disabled = false;
                     } else {
                         // Jika tidak ada lagi film, ubah teks tombol
-                        loadMoreBtn.innerHTML = 'Tidak Ada Lagi Film';
+                        loadMoreBtn.innerHTML = 'No More Movies';
                         loadMoreBtn.disabled = true;
                     }
 
