@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cine Visio | Free HD Movie & TV Show Streaming</title>
-    <link rel="icon" type="image/png" href="https://image.tmdb.org/t/p/w92/gK2g056tF1sK2c0M4uS3wNlqG4W.jpg">
+    <!-- Favicon film sekarang menggunakan placeholder gambar yang lebih umum -->
+    <link rel="icon" type="image/png" href="https://placehold.co/32x32/1e40af/ffffff?text=CV">
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Ini akan menjadi file konfigurasi iklan eksternal Anda -->
     <script src="config.js" defer></script>
@@ -603,17 +604,17 @@
                     });
                 };
 
+                setInterval(() => {
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    showSlide(currentSlide);
+                }, 5000);
+
                 dots.forEach(dot => {
                     dot.addEventListener('click', (e) => {
                         currentSlide = parseInt(e.target.dataset.slideTo);
                         showSlide(currentSlide);
                     });
                 });
-
-                setInterval(() => {
-                    currentSlide = (currentSlide + 1) % slides.length;
-                    showSlide(currentSlide);
-                }, 5000);
             }
 
             // Tombol 'Load More' untuk GenrePage
