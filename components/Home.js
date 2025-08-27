@@ -114,7 +114,7 @@ export default function Home() {
       <div className="px-4 md:px-8">
         {/* About Section */}
         <section className="bg-gray-800 rounded-2xl p-8 shadow-2xl mb-12 transform hover:scale-105 transition-transform duration-300">
-          <h1 className="text-3xl font-bold text-white mb-4">Cine Visio: Free HD Movie & TV Show Streaming</h1>
+          <h1 className="text-3xl font-bold text-white mb-4">Cine Visio: Stream Free Movies & TV Shows HD</h1>
           <p className="text-gray-300 text-justify leading-relaxed">
             Cine Visio is your one-stop destination for high-quality, free streaming of movies and TV shows. Explore our collection of popular movies, trending films, and the most talked-about TV series. With an easy-to-use interface and smooth video player, we ensure a pleasant viewing experience. Start streaming today!
           </p>
