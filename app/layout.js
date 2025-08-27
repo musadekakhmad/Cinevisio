@@ -12,11 +12,11 @@ import AdsterraLayoutWrapper from '../components/AdsterraLayoutWrapper'; // Impo
 // Menghapus import 'video.js/dist/video-js.css'; dari sini
 
 export const metadata = {
-  title: 'Cine Visio | Free HD Movie & TV Show Streaming',
+  title: 'Cine Visio | Stream Free Movies & TV Shows HD',
   description: 'Your ultimate destination for high-quality, free movie and TV show streaming..',
   // Meta tag Open Graph untuk Facebook
   openGraph: {
-    title: 'Cine Visio | Free HD Movie & TV Show Streaming',
+    title: 'Cine Visio | Stream Free Movies & TV Shows HD',
     description: 'Your ultimate destination for high-quality, free movie and TV show streaming..',
     url: 'https://cinevisio.netlify.app/',
     siteName: 'Cine Visio',
@@ -38,7 +38,7 @@ export const metadata = {
     card: 'summary_large_image',
     site: '@WatchStream123', // User Twitter Anda
     creator: '@WatchStream123',
-    title: 'Cine Visio | Free HD Movie & TV Show Streaming',
+    title: 'Cine Visio | Stream Free Movies & TV Shows HD',
     description: 'Your ultimate destination for high-quality, free movie and TV show streaming..',
     images: ['https://live.staticflickr.com/65535/54732469204_6663bf32b7_b.jpg'], // Ganti dengan URL gambar yang sesuai
   },
