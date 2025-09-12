@@ -1,23 +1,25 @@
 // ---------------------------------------------------------------- //
-// Nama File: app/layout.js
-// Fungsi: Merupakan layout utama untuk seluruh halaman web,
-//         digunakan untuk mengatur elemen-elemen yang tampil
-//         di semua halaman, seperti header, footer, dan lebar konten.
+// File Name: app/layout.js
+// Function: This is the main layout for the entire website,
+//           used to configure elements that appear
+//           on all pages, such as the header, footer, and content width.
 // ---------------------------------------------------------------- //
 
 import './globals.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import AdsterraLayoutWrapper from '../components/AdsterraLayoutWrapper'; // Impor komponen wrapper baru
-// Menghapus import 'video.js/dist/video-js.css'; dari sini
+import AdsterraLayoutWrapper from '../components/AdsterraLayoutWrapper';
 
 export const metadata = {
-  title: 'Cine Visio | Stream Free Movies & TV Shows HD',
-  description: 'Your ultimate destination for high-quality, free movie and TV show streaming..',
-  // Meta tag Open Graph untuk Facebook
+  // Changing title and description to English
+  title: 'Cine Visio | Watch Movies and TV Series Streaming Free',
+  description: 'Your ultimate destination for high-quality Watch Movies and TV shows streaming.',
+  // Menambahkan meta keywords untuk SEO
+  keywords: ['Cine Visio', 'watch free movies', 'watch free tv series', 'streaming', 'film gratis'],
+  // Open Graph meta tags for Facebook
   openGraph: {
-    title: 'Cine Visio | Stream Free Movies & TV Shows HD',
-    description: 'Your ultimate destination for high-quality, free movie and TV show streaming..',
+    title: 'Cine Visio | Watch Movies and TV Series Streaming Free',
+    description: 'Your ultimate destination for high-quality Watch Movies and TV shows streaming.',
     url: 'https://cinevisio.netlify.app/',
     siteName: 'Cine Visio',
     images: [
@@ -28,34 +30,36 @@ export const metadata = {
         alt: 'Cine Visio',
       },
     ],
+    // Changing locale to English
     locale: 'en_US',
     type: 'website',
-    // Properti khusus untuk Facebook, 'og:app_id'
-    appId: 'librasinema',
+    // Special property for Facebook, 'og:app_id'
+    appId: 'cut.erna.984',
   },
-  // Meta tag Twitter Card
+  // Twitter Card meta tags
   twitter: {
     card: 'summary_large_image',
-    site: '@WatchStream123', // User Twitter Anda
+    site: '@WatchStream123', // Your Twitter user
     creator: '@WatchStream123',
-    title: 'Cine Visio | Stream Free Movies & TV Shows HD',
-    description: 'Your ultimate destination for high-quality, free movie and TV show streaming..',
-    images: ['https://live.staticflickr.com/65535/54732469204_6663bf32b7_b.jpg'], // Ganti dengan URL gambar yang sesuai
+    // Mengoreksi kesalahan ketik pada deskripsi
+    title: 'Cine Visio | Watch Movies and TV Series Streaming Free',
+    description: 'Your ultimate destination for high-quality Watch Movies and TV shows streaming.',
+    images: ['https://live.staticflickr.com/65535/54732469204_6663bf32b7_b.jpg'], // Replace with the appropriate image URL
   },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      {/* Menambahkan suppressHydrationWarning untuk mengatasi hydration error. */}
-      {/* Ini sering terjadi saat ada script pihak ketiga atau ekstensi browser yang memodifikasi tag body. */}
       <body suppressHydrationWarning={true}>
         <AdsterraLayoutWrapper>
-          {/* Kontainer utama dengan lebar maksimum */}
-          {/* Memindahkan Header, konten, dan Footer ke dalam kontainer ini */}
           <div className="mx-auto max-w-7xl">
             <Header />
             {children}
+            {/* Native Banner diletakkan di sini, sebelum Footer */}
+            <div id="container-a52ccbacbc0d553d99e20f9a168d288f"></div>
+            {/* Anda juga perlu menambahkan skrip Native Banner di sini */}
+            <script async="async" data-cfasync="false" src="//discreetisabella.com/a52ccbacbc0d553d99e20f9a168d288f/invoke.js"></script>
             <Footer />
           </div>
         </AdsterraLayoutWrapper>
