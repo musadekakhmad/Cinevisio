@@ -79,7 +79,7 @@ const MovieCard = ({ media, mediaType }) => {
 // Home Page Component
 // ===================================
 const HomePage = () => {
-  const { data, loading, error } = useFetch(`${BASE_URL}/movie/popular`);
+  const { data, loading, error } = useFetch(`${API_URL}/movie/popular`);
 
   return (
     <main className="container mx-auto px-4 py-8 max-w-7xl">
