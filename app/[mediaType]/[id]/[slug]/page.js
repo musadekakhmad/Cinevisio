@@ -12,8 +12,8 @@ import Link from 'next/link';
   BASE_URL points to a TMDB proxy to avoid CORS issues.
   IMAGE_BASE_URL is the base URL for poster images.
 */
-const API_KEY = ''; // <-- FILL WITH YOUR API KEY
-const BASE_URL = 'https://tmdb-api-proxy.argoyuwono119.workers.dev';
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY; // <-- FILL WITH YOUR API KEY
+const API_URL = process.env.NEXT_PUBLIC_TMDB_API_URL;
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
 /*
