@@ -82,7 +82,7 @@ export default function Home() {
     error: animeMovieError, 
     hasMore: hasMoreMovies, 
     loadMore: loadMoreMovies 
-  } = useFetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${animeMovieId}`);
+  } = useFetch(`${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=${animeMovieId}`);
   
   // Fetch Anime Series (Genre ID 16 for Animation)
   const animeSeriesId = 16;
