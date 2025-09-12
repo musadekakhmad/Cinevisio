@@ -4,8 +4,8 @@ import { notFound } from 'next/navigation';
 import WatchClient from './WatchClient';
 
 // Konfigurasi API
-const API_KEY = ''; // <-- ISI DENGAN API KEY ANDA
-const BASE_URL = 'https://tmdb-api-proxy.argoyuwono119.workers.dev';
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY; // <-- ISI DENGAN API KEY ANDA
+const BASE_URL = process.env.NEXT_PUBLIC_TMDB_API_URL;
 
 // ====================================================================================
 // FUNGSI UNTUK MENDAPATKAN DATA (di sisi server)
@@ -19,11 +19,12 @@ async function getMediaDetails(mediaType, id) {
   return res.json();
 }
 
-async function getSimilarMedia(mediaType, id) {
-  const res = await fetch(`${BASE_URL}/${mediaType}/${id}/similar?api_key=${API_KEY}`);
+// Fungsi baru untuk mendapatkan daftar statis dari TMDB
+async function getStaticListMedia(listId) {
+  const res = await fetch(`${BASE_URL}/list/${listId}?api_key=${API_KEY}`);
   if (!res.ok) {
     // Jika gagal, kembalikan array kosong
-    return { results: [] };
+    return { items: [] };
   }
   return res.json();
 }
@@ -36,9 +37,10 @@ export default async function Page({ params }) {
   const { mediaType, id } = await params;
 
   try {
-    const [detailsData, similarData] = await Promise.all([
+    const [detailsData, staticListData] = await Promise.all([
       getMediaDetails(mediaType, id),
-      getSimilarMedia(mediaType, id),
+      // Menggunakan daftar statis TMDB dengan ID 143347
+      getStaticListMedia(143347),
     ]);
 
     // Meneruskan semua data yang diperlukan ke komponen klien
@@ -47,7 +49,7 @@ export default async function Page({ params }) {
         mediaType={mediaType}
         id={id}
         initialDetails={detailsData}
-        initialSimilarMedia={similarData.results}
+        initialSimilarMedia={staticListData.items}
       />
     );
   } catch (error) {
@@ -71,7 +73,7 @@ export async function generateMetadata({ params }) {
   }
 
   const title = `${details.title || details.name} | Cine Visio`;
-  const description = details.overview || 'Tujuan utama Anda untuk streaming film dan acara TV gratis berkualitas tinggi.';
+  const description = details.overview || 'Your free high quality streaming center for movies and TV shows.';
   const imageUrl = details.poster_path
     ? `https://image.tmdb.org/t/p/original${details.poster_path}`
     : 'https://placehold.co/1200x630/000000/FFFFFF?text=Cine-Visio';
