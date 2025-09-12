@@ -2,7 +2,7 @@ import MovieCard from '@/components/MovieCard';
 import { notFound } from 'next/navigation';
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-const API_URL = process.env.NEXT_PUBLIC_TMDB_API_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_TMDB_API_URL;
 
 // Fungsi untuk mengambil data berdasarkan mediaType dan category
 async function getMediaByCategory(mediaType, category) {
