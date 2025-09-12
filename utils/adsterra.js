@@ -1,15 +1,14 @@
-// adsterra.js
+// utils/adsterra.jsx
 // File utilitas untuk mengelola logika Adsterra.
 
 // Daftar tautan direct link Adsterra.
-// Salin daftar ini dari file config.js Anda jika ada perubahan.
 const ADSTERRA_DIRECT_LINKS = [
     'https://discreetisabella.com/g77bpz0g?key=f1cc7147d1c59d932b6186896ab8854c',
     'https://discreetisabella.com/vttzzi1n?key=bfc8d7d57de835830a0d72fbe7a47be1',
     'https://discreetisabella.com/y5fc24f7?key=d6efa8068c5da148ed5cf346ffa62290',
     'https://discreetisabella.com/a43vczjf1b?key=70467091cade36a7f916bfe58dc80cff',
     'https://discreetisabella.com/t71keggw?key=9c6906c82c8eb114e2baef9058f4c4e5',
-    'https://discreetisabella.com/vb5ixea83?key=c4e7438c85503eda026984db5e7aa3c4',              
+    'https://discreetisabella.com/vb5ixea83?key=c4e7438c85503eda026984db5e7aa3c4',
     'https://discreetisabella.com/x818nj48?key=db0a9d9fa9d81626b459383a7bdc33ee',
     'https://discreetisabella.com/gd8bwkyj?key=d2d35cf16f521bf5e9accfdd865dae8f',
     'https://discreetisabella.com/paij3re0by?key=fa60f72b73c05d987bd978f83a6deaa8',
@@ -36,18 +35,12 @@ export const handleAdsterraClick = (e, targetUrl) => {
         clickCount += 1;
         localStorage.setItem('adsterraClickCount', clickCount.toString());
 
-        // Pemicu iklan pada klik ke-2, ke-7, ke-12, ke-17, dst.
-        // Formula: (n-2) % 4 === 0, dimana n adalah jumlah klik.
-        if (clickCount > 1 && (clickCount - 2) % 5 === 0) {
-            // Mencegah navigasi ke halaman detail
-            e.preventDefault();
-
+        // Pemicu iklan pada klik ke-3, ke-9, ke-15, ke-21, dst.
+        // Formula: (n - 3) % 6 === 0, di mana n adalah jumlah klik.
+        if (clickCount > 1 && (clickCount - 3) % 6 === 0) {
             // Membuka tautan iklan di tab baru
-            const adLink = ADSTERRA_DIRECT_LINKS[(clickCount - 2) / 5 % ADSTERRA_DIRECT_LINKS.length];
+            const adLink = ADSTERRA_DIRECT_LINKS[Math.floor((clickCount - 3) / 6) % ADSTERRA_DIRECT_LINKS.length];
             window.open(adLink, '_blank');
-            
-            // Setelah membuka iklan, navigasi ke halaman tujuan
-            window.location.href = targetUrl;
         }
     }
 };
