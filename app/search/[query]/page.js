@@ -4,8 +4,8 @@ import Link from 'next/link';
 import MovieCard from '@/components/MovieCard';
 
 // URL dasar untuk API
-const API_KEY = ''; // <-- ISI DENGAN API KEY ANDA
-const BASE_URL = 'https://tmdb-api-proxy.argoyuwono119.workers.dev';
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+const API_URL = process.env.NEXT_PUBLIC_TMDB_API_URL;
 
 // ===================================
 // Custom Hook untuk Fetch Data
