@@ -6,7 +6,7 @@ import WatchNowButton from '@/components/WatchNowButton';
 
 // Konfigurasi API
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-const API_URL = process.env.NEXT_PUBLIC_TMDB_API_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_TMDB_API_URL;
 
 // ====================================================================================
 // FUNGSI UNTUK MENDAPATKAN METADATA DINAMIS (Penting untuk SEO)
