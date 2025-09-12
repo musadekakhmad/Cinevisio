@@ -9,7 +9,7 @@ import WatchNowButton from '@/components/WatchNowButton';
 
 // Konfigurasi API
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY; // <-- ISI DENGAN API KEY ANDA
-const API_URL = process.env.NEXT_PUBLIC_TMDB_API_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_TMDB_API_URL;
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w1280'; // URL untuk gambar OG
 
 // Fungsi untuk mengambil data media (film atau acara TV)
