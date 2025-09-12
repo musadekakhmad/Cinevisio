@@ -92,7 +92,7 @@ export default function Home() {
     error: animeSeriesError, 
     hasMore: hasMoreSeries, 
     loadMore: loadMoreSeries 
-  } = useFetch(`${BASE_URL}/discover/tv?api_key=${API_KEY}&with_genres=${animeSeriesId}`);
+  } = useFetch(`${API_URL}/discover/tv?api_key=${API_KEY}&with_genres=${animeSeriesId}`);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white font-sans">
