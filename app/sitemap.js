@@ -1,13 +1,4 @@
 // app/sitemap.js
-import {
-  getMovieGenres,
-  getMoviesByCategory,
-  getTvSeriesByCategory,
-  getTvSeriesGenres,
-  getMoviesByGenre,
-  getTvSeriesByGenre
-} from '../lib/api';
-
 const BASE_URL = 'https://cinevisio.netlify.app';
 
 // Fungsi utilitas untuk membuat slug
@@ -28,40 +19,80 @@ const createSlug = (name, year) => {
   return `${baseSlug}-${year}`;
 };
 
+// Fungsi untuk fetch data dari TMDB API
+async function fetchFromTMDB(url) {
+  try {
+    const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY;
+    const response = await fetch(`${process.env.NEXT_PUBLIC_TMDB_API_URL || 'https://api.themoviedb.org/3'}${url}?api_key=${apiKey}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.results || [];
+  } catch (error) {
+    console.error(`Error fetching from TMDB: ${error.message}`);
+    return [];
+  }
+}
+
+// Fungsi untuk mendapatkan genre
+async function getGenres(type) {
+  try {
+    const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY;
+    const response = await fetch(`${process.env.NEXT_PUBLIC_TMDB_API_URL || 'https://api.themoviedb.org/3'}/genre/${type}/list?api_key=${apiKey}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.genres || [];
+  } catch (error) {
+    console.error(`Error fetching genres: ${error.message}`);
+    return [];
+  }
+}
+
 export default async function sitemap() {
   const movieCategories = ['popular', 'now_playing', 'upcoming', 'top_rated'];
   const tvCategories = ['popular', 'airing_today', 'on_the_air', 'top_rated'];
 
   try {
-    const [movieGenres, tvGenres] = await Promise.all([
-      getMovieGenres(),
-      getTvSeriesGenres()
-    ]);
+    // Pastikan API key tersedia
+    const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY;
+    if (!apiKey) {
+      console.error('TMDB API key is missing');
+      throw new Error('API key is required');
+    }
 
     console.log('Mengambil data untuk sitemap CineVisio...');
 
-    // Ambil semua film dari semua kategori (halaman 1 saja)
+    // Ambil genre film dan TV
+    const [movieGenres, tvGenres] = await Promise.all([
+      getGenres('movie'),
+      getGenres('tv')
+    ]);
+
+    // Ambil data film dari kategori
     const movieCategoryPromises = movieCategories.map(async (category) => {
-      const movies = await getMoviesByCategory(category, 1);
-      return movies || [];
+      return await fetchFromTMDB(`/movie/${category}`);
     });
     
-    // Ambil semua film dari semua genre (halaman 1 saja)
-    const movieGenrePromises = (movieGenres || []).map(async (genre) => {
-      const movies = await getMoviesByGenre(genre.id, 1);
-      return movies || [];
+    // Ambil data film dari genre
+    const movieGenrePromises = movieGenres.map(async (genre) => {
+      return await fetchFromTMDB(`/discover/movie?with_genres=${genre.id}`);
     });
 
-    // Ambil semua serial TV dari semua kategori (halaman 1 saja)
+    // Ambil data serial TV dari kategori
     const tvCategoryPromises = tvCategories.map(async (category) => {
-      const series = await getTvSeriesByCategory(category, 1);
-      return series || [];
+      return await fetchFromTMDB(`/tv/${category}`);
     });
 
-    // Ambil semua serial TV dari semua genre (halaman 1 saja)
-    const tvGenrePromises = (tvGenres || []).map(async (genre) => {
-      const series = await getTvSeriesByGenre(genre.id, 1);
-      return series || [];
+    // Ambil data serial TV dari genre
+    const tvGenrePromises = tvGenres.map(async (genre) => {
+      return await fetchFromTMDB(`/discover/tv?with_genres=${genre.id}`);
     });
 
     // Gabungkan semua hasil pengambilan data
@@ -117,21 +148,21 @@ export default async function sitemap() {
       priority: 0.8
     }));
     
-    const movieGenreUrls = (movieGenres || []).map((genre) => ({
+    const movieGenreUrls = movieGenres.map((genre) => ({
       url: `${BASE_URL}/movie/genre/${genre.id}`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.7
     }));
     
-    const tvGenreUrls = (tvGenres || []).map((genre) => ({
+    const tvGenreUrls = tvGenres.map((genre) => ({
       url: `${BASE_URL}/tv/genre/${genre.id}`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.7
     }));
 
-    // Buat URL slug film dari data yang sudah ada (tanpa mengambil detail ulang)
+    // Buat URL slug film dari data yang sudah ada
     const movieSlugUrls = Array.from(uniqueMovies.values()).map((movie) => {
       const year = movie.release_date?.substring(0, 4);
       return {
@@ -176,6 +207,8 @@ export default async function sitemap() {
       { url: `${BASE_URL}/`, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
       { url: `${BASE_URL}/trending`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
       { url: `${BASE_URL}/search`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+      { url: `${BASE_URL}/movie/popular`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
+      { url: `${BASE_URL}/tv/popular`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
     ];
   }
 }
