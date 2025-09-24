@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import MovieCard from '@/components/MovieCard';
+import MediaCard from '@/components/MediaCard';
 
 // URL dasar untuk API
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
