@@ -5,8 +5,8 @@
 import { searchMoviesAndTv } from '../../lib/api.jsx';
 import MovieList from '../../components/MovieList.jsx';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { useState, useEffect, use } from 'react'; // Import 'use'
+// Import 'use' from React
+import { useState, useEffect, use } from 'react'; 
 
 export default function SearchPage({ searchParams }) {
   // **Unwrap searchParams using React.use()**

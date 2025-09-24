@@ -11,7 +11,7 @@ export default function About() {
       <div className="bg-gradient-to-b from-orange-900/50 to-slate-900 py-16">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-orange-400">
-            Cine Visio - Ultimate Movie & TV Series Database
+            Cinevisio - Ultimate Movie & TV Series Database
           </h1>
           <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto">
             Your comprehensive guide to movies, TV series, reviews, and streaming information. Discover, explore, and enjoy cinematic excellence.
