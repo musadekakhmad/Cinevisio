@@ -38,6 +38,13 @@ const createSmartSlug = (item, allMovies = []) => {
   return `${baseSlug}-${year}`.replace(/-+/g, '-').replace(/-$/, '');
 };
 
+export default function MediaCard({ media }) {
+  return (
+    <div className="media-card">
+      {/* Isi komponen MediaCard */}
+    </div>
+  );
+}
 export default function MediaCard({ 
   mediaItem, 
   allMovies = [], // ✅ TAMBAHKAN PARAMETER ALLMOVIES
