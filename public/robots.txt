@@ -1,6 +1,10 @@
-# Allow all web crawlers to access the entire site
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*?*
+Crawl-delay: 1
 
-# Specify the location of the sitemap file
-Sitemap: https://cinevisio.netlify.app/sitemap.xml
+# Sitemaps
+Sitemap: https://vegamovies-hd.vercel.app/sitemap.xml

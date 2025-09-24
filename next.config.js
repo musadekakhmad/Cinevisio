@@ -1,24 +1,25 @@
+// next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
   images: {
-    // Gunakan remotePatterns untuk konfigurasi gambar.
-    // Ini menggantikan images.domains yang sudah deprecated.
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'image.tmdb.org',
-        port: '',
         pathname: '/t/p/**',
       },
       {
         protocol: 'https',
         hostname: 'placehold.co',
-        port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'via.placeholder.com',
+        pathname: '/**',
+      }
     ],
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

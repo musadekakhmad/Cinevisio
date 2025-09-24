@@ -1,21 +1,69 @@
-/* globals.css */
 @import "tailwindcss";
 
-/* Tentukan warna tema gelap sebagai default di sini */
 :root {
-  --background: #111827; /* Mengatur warna latar belakang menjadi dark blue-gray */
-  --foreground: #ededed;
+  --background: #ffffff;
+  --foreground: #171717;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  line-height: 1.5;
+}
+
+/* Optional: Add smooth scrolling for better UX */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optional: Improve focus styles for accessibility */
+*:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Tambahkan di globals.css */
+:root {
+  --background: #f7fafc;
+  --foreground: #1a202c;
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1a202c;
+    --foreground: #f7fafc;
+    --card-bg: #2d3748;
+    --card-border: #4a5568;
+  }
+}
+
+.dark {
+  --background: #1a202c;
+  --foreground: #f7fafc;
+  --card-bg: #2d3748;
+  --card-border: #4a5568;
+}
+
+.light {
+  --background: #f7fafc;
+  --foreground: #1a202c;
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
 }
