@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { getMoviesByKeyword } from '../../../lib/api';
-import MediaCard from '../../../components/MediaCard';
+import MediaCard from '@/components/MediaCard';
 
 export default function EroticMoviesPage() {
   const [movies, setMovies] = useState([]);

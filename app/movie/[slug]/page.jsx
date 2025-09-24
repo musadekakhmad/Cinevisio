@@ -15,7 +15,7 @@ import {
   getMoviesByGenre,
 } from '../../../lib/api';
 import MovieList from '../../../components/MovieList';
-import MediaCard from '../../components/MediaCard';
+import MediaCard from '@/components/MediaCard';
 
 const CATEGORIES = ['now_playing', 'popular', 'top_rated', 'upcoming'];
 

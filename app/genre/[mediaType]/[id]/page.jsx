@@ -1,4 +1,4 @@
-import MediaCard from '../../../components/MediaCard';
+import MediaCard from '@/components/MediaCard';
 import { notFound } from 'next/navigation';
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
