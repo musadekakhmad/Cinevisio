@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { fetchTMDB, getImageUrl, createSlug } from "@/api";
+import { fetchTMDB } from "@/api"; 
 
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 export default async function Home({ searchParams }) {

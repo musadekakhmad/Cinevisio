@@ -1,4 +1,4 @@
-const TMDB_API_KEY = "f409e7b13839f996f020b829c2764a1f"; 
+const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY;
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
 export async function fetchTMDB(endpoint) {

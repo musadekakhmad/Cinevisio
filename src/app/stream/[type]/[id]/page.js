@@ -1,10 +1,9 @@
-import Link from "next/link";
-import { fetchTMDB } from "@/api";
+import { fetchTMDB } from "@/api"; 
 
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
-// 1. GENERATE DYNAMIC METADATA (UNTUK SEO)
-export async function generateMetadata({ params }) {
+export default async function StreamPage({ params }) {
   const { type, id } = await params;
   
   if (isNaN(id)) {

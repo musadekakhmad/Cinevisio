@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { fetchTMDB, createSlug } from "@/api";
 
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 export default async function TrailerPage({ params }) {

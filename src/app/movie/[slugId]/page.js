@@ -1,10 +1,9 @@
-import Link from "next/link";
-import { fetchTMDB, getImageUrl, createSlug } from "@/api";
+import { fetchTMDB } from "@/api"; 
 
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
-// HELPER PINTAR: Mengambil data TMDB, Auto-Switch Tipe jika salah, dan Sembunyikan Log 404
-async function fetchSafeTMDB(type, id, extraPath = "") {
+export default async function DetailPage({ params }) {
   const path = extraPath ? `/${extraPath}` : "";
   const primaryEndpoint = `/${type}/${id}${path}`;
   
