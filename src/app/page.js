@@ -1,103 +1,95 @@
-import Image from "next/image";
+import Link from "next/link";
+import { fetchTMDB, getImageUrl, createSlug } from "@/api";
 
-export default function Home() {
+// Fungsi Komponen Utama Homepage (Berjalan langsung di Server)
+export default async function HomePage() {
+  // 1. Ambil data Film Trending & Top Rated langsung dari server TMDB
+  const trendingData = await fetchTMDB("/trending/movie/day?language=en-US");
+  const topRatedData = await fetchTMDB("/movie/top_rated?language=en-US&page=1");
+
+  const trendingMovies = trendingData?.results?.slice(0, 8) || [];
+  const topRatedMovies = topRatedData?.results?.slice(0, 8) || [];
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      
+      {/* SECTION 1: TRENDING MOVIES */}
+      <section className="mb-12">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl md:text-2xl font-bold tracking-wide border-l-4 border-red-600 pl-3">
+            Trending Today
+          </h2>
+          <span className="text-xs text-gray-400">Target Market: US / LatAm / EU</span>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        
+        {/* Grid Poster Film (16:9 atau Poster Standar Responsif) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
+          {trendingMovies.map((movie) => {
+            const slug = createSlug(movie.title);
+            // URL Dynamic Route Next.js akan berbentuk: /movie/title-slug-id
+            const detailUrl = `/movie/${slug}-${movie.id}`;
+
+            return (
+              <Link href={detailUrl} key={movie.id} className="group block bg-[#141414] rounded-lg overflow-hidden border border-[#222] hover:border-red-600 transition duration-300">
+                <div className="relative aspect-[2/3] w-full bg-[#222]">
+                  <img 
+                    src={getImageUrl(movie.poster_path, 'w342')} 
+                    alt={movie.title}
+                    className="object-cover w-full h-full group-hover:scale-105 transition duration-300"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-2">
+                  <h3 className="text-xs font-semibold truncate group-hover:text-red-500 transition">
+                    {movie.title}
+                  </h3>
+                  <p className="text-[10px] text-gray-500 mt-0.5">
+                    {movie.release_date ? movie.release_date.substring(0, 4) : "N/A"}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* SECTION 2: TOP RATED MOVIES */}
+      <section className="mb-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl md:text-2xl font-bold tracking-wide border-l-4 border-red-600 pl-3">
+            Top Rated Global
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
+          {topRatedMovies.map((movie) => {
+            const slug = createSlug(movie.title);
+            const detailUrl = `/movie/${slug}-${movie.id}`;
+
+            return (
+              <Link href={detailUrl} key={movie.id} className="group block bg-[#141414] rounded-lg overflow-hidden border border-[#222] hover:border-red-600 transition duration-300">
+                <div className="relative aspect-[2/3] w-full bg-[#222]">
+                  <img 
+                    src={getImageUrl(movie.poster_path, 'w342')} 
+                    alt={movie.title}
+                    className="object-cover w-full h-full group-hover:scale-105 transition duration-300"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-2">
+                  <h3 className="text-xs font-semibold truncate group-hover:text-red-500 transition">
+                    {movie.title}
+                  </h3>
+                  <p className="text-[10px] text-gray-500 mt-0.5">
+                    ⭐ {movie.vote_average ? movie.vote_average.toFixed(1) : "0.0"}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
     </div>
   );
 }
