@@ -1,64 +1,81 @@
 import Link from "next/link";
-import { fetchTMDB } from "@/api";
+import { fetchTMDB, createSlug } from "@/api";
 
-export const dynamic = 'force-dynamic'; // 🟢 Memaksa halaman dinamis ini di-render saat diakses
+export const dynamic = 'force-dynamic';
 
-// 1. Meta Tags (Sudah diperbaiki dengan await params)
-export async function generateMetadata({ params }) {
-  const { type, id } = await params; // 🟢 Di-await dulu di sini
-  const data = await fetchTMDB(`/${type}/${id}?language=en-US`);
-  if (!data) return { title: "Watch Official Trailer - CineVisio" };
-  const titleName = data.title || data.name;
-  return {
-    title: `${titleName} Official Trailer Online Free - CineVisio`,
-    description: `Watch the official movie trailer and teaser for ${titleName} in Full HD on CineVisio.`,
-  };
-}
-
-// 2. Komponen Utama (Sudah diperbaiki dengan await params)
 export default async function TrailerPage({ params }) {
-  const { type, id } = await params; // 🟢 Di-await dulu di sini
+  const { type, id } = await params;
 
-  const data = await fetchTMDB(`/${type}/${id}?language=en-US`);
-  const titleName = data ? (data.title || data.name) : "Content";
+  // Tarik data film/TV untuk mendapatkan judul aslinya demi pembuatan slug URL yang akurat
+  let data = null;
+  try {
+    data = await fetchTMDB(`/${type}/${id}`);
+  } catch (e) {
+    // Jika gagal, coba fallback silang tipe
+    try {
+      data = await fetchTMDB(`/${type === "movie" ? "tv" : "movie"}/${id}`);
+    } catch (err) {}
+  }
 
-  const videoData = await fetchTMDB(`/${type}/${id}/videos?language=en-US`);
-  const officialTrailer = videoData?.results?.find(
-    (vid) => vid.type === "Trailer" && vid.site === "YouTube"
-  ) || videoData?.results?.[0];
+  if (!data) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-20 text-center text-red-500 font-bold bg-[#0f0f0f] min-h-screen">
+        Trailer data unavailable.
+        <Link href="/" className="block text-xs text-gray-500 underline mt-4">Back to Home</Link>
+      </div>
+    );
+  }
 
-  const youtubeKey = officialTrailer?.key;
+  const title = data.title || data.name;
+  const isTv = type === "tv" || data.first_air_date;
+  
+  // Rancang ulang URL tujuan agar mengarah ke format SEO baru kita: /movie/judul-id atau /movie/tv-judul-id
+  const prefix = isTv ? "tv-" : "";
+  const targetSlugId = `${prefix}${createSlug(title)}-${id}`;
+
+  // Ambil data video/trailer dari TMDB
+  let videoData = null;
+  try {
+    videoData = await fetchTMDB(`/${isTv ? "tv" : "movie"}/${id}/videos`);
+  } catch (e) {}
+
+  const trailer = videoData?.results?.find(
+    (v) => v.type === "Trailer" && (v.site === "YouTube" || v.site === "Youtube")
+  );
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#222] pb-4">
-        <div>
-          <span className="text-xs bg-red-600/20 text-red-500 font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">Official Trailer</span>
-          <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight mt-2">{titleName}</h1>
-        </div>
-        <Link href={data ? `/movie/${id}` : "/"} className="text-xs bg-[#222] hover:bg-[#333] border border-[#333] px-4 py-2 rounded-lg text-gray-300 transition text-center self-start sm:self-center">
-          ⬅ Back to Details
+    <div className="bg-[#0f0f0f] text-gray-100 min-h-screen py-8">
+      <div className="max-w-4xl mx-auto px-4">
+        
+        {/* TOMBOL KEMBALI KUNCI SEO - Membawa user balik ke halaman detail yang tepat */}
+        <Link 
+          href={`/movie/${targetSlugId}`} 
+          className="inline-block text-xs font-bold text-red-600 hover:text-red-500 mb-6 transition"
+        >
+          &larr; Back to Details
         </Link>
-      </div>
 
-      <div className="w-full bg-black rounded-2xl overflow-hidden shadow-2xl border border-[#222] relative aspect-video">
-        {youtubeKey ? (
-          <iframe src={`https://www.youtube.com/embed/${youtubeKey}?autoplay=1&modestbranding=1`} className="w-full h-full" allowFullScreen frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        <h1 className="text-xl md:text-2xl font-black text-white mb-6 uppercase tracking-wide">
+          Official Trailer: <span className="text-gray-400">{title}</span>
+        </h1>
+
+        {trailer ? (
+          <div className="relative aspect-video w-full bg-black rounded-2xl overflow-hidden border border-[#222] shadow-2xl">
+            <iframe
+              src={`https://www.youtube.com/embed/${trailer.key}?autoplay=1`}
+              className="absolute top-0 left-0 w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              frameBorder="0"
+            ></iframe>
+          </div>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center text-gray-500 text-sm p-6 text-center">
-            🎬 <span className="mt-2">Sorry, the official trailer for this content is currently unavailable.</span>
+          <div className="aspect-video w-full bg-[#141414] rounded-2xl border border-[#222] flex flex-col items-center justify-center text-gray-500 text-sm font-bold gap-2 shadow-inner">
+            <span>📺 Video trailer belum tersedia untuk konten ini.</span>
+            <span className="text-xs font-normal text-gray-600">Silakan tonton langsung melalui tombol Watch Now.</span>
           </div>
         )}
-      </div>
 
-      <div className="mt-6 bg-[#141414] p-5 rounded-xl border border-[#222] flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div>
-          <h3 className="text-sm font-semibold text-white">Enjoyed the trailer?</h3>
-          <p className="text-xs text-gray-400 mt-0.5">Click the button on the right to stream the full length feature now.</p>
-        </div>
-        <Link href={`/stream/${type}/${id}`} className="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-6 py-3 rounded-lg transition transform hover:scale-[1.03] w-full sm:w-auto text-center shadow-lg">
-          🚀 STREAM FULL MOVIE NOW
-        </Link>
       </div>
     </div>
   );

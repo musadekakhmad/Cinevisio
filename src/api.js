@@ -1,44 +1,38 @@
 const TMDB_API_KEY = "f409e7b13839f996f020b829c2764a1f"; 
-const BASE_URL = "https://api.themoviedb.org/3";
+const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
-// Fungsi fetch global yang dioptimasi untuk SSG dengan API Key biasa
 export async function fetchTMDB(endpoint) {
+  const url = `${TMDB_BASE_URL}${endpoint}${endpoint.includes("?") ? "&" : "?"}api_key=${TMDB_API_KEY}`;
+  
   try {
-    // Menyisipkan api_key ke dalam URL parameter bawaan TMDB
-    const separator = endpoint.includes('?') ? '&' : '?';
-    const url = `${BASE_URL}${endpoint}${separator}api_key=${TMDB_API_KEY}`;
-
     const res = await fetch(url, {
-      method: 'GET',
-      headers: {
-        accept: 'application/json'
-      },
-      // 🟢 KUNCI UTAMA SSG: Data disimpan di cache server selama 1 hari (86400 detik).
-      // Robot Google US/LatAm bisa membaca halaman secara instan tanpa membebani limit API TMDB Anda!
-      next: { revalidate: 86400 }
+      next: { revalidate: 3600 }, // Cache 1 jam demi performa ngebut
     });
 
     if (!res.ok) {
+      // Lempar error murni tanpa perlu console.error di sini agar tidak membanjiri terminal
       throw new Error(`TMDB error! status: ${res.status}`);
     }
     return await res.json();
   } catch (error) {
-    console.error("Fetch TMDB Error:", error);
-    return null;
+    // Teruskan error ke pemanggil (biar dicatch oleh fetchSafeTMDB secara senyap jika 404)
+    throw error;
   }
 }
 
-// Helper untuk mengambil URL poster/banner film
-export function getImageUrl(path, size = 'w500') {
-  return path ? `https://image.tmdb.org/t/p/${size}${path}` : 'https://via.placeholder.com/342x513?text=No+Poster';
+export function getImageUrl(path, size = "w500") {
+  if (!path) return "https://via.placeholder.com/500x750?text=No+Image";
+  return `https://image.tmdb.org/t/p/${size}${path}`;
 }
 
-// Helper penting untuk membuat Slug URL ramah SEO pasar Global (US/Eropa)
-export function createSlug(title) {
-  if (!title) return 'movie';
-  return title
+export function createSlug(text) {
+  if (!text) return "video";
+  return text
+    .toString()
     .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '') // Hapus karakter spesial
-    .replace(/\s+/g, '-')         // Spasi diubah jadi tanda hubung
-    .replace(/-+/g, '-');         // Cegah double strip ---
+    .replace(/\s+/g, "-")           // Ganti spasi dengan tanda -
+    .replace(/[^\w\-]+/g, "")       // Hapus karakter aneh
+    .replace(/\-\-+/g, "-")         // Ganti tanda double -- dengan single -
+    .replace(/^-+/, "")             // Potong tanda - di awal teks
+    .replace(/-+$/, "");            // Potong tanda - di akhir teks
 }
