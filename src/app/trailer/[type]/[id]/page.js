@@ -28,20 +28,21 @@ export default async function TrailerPage({ params }) {
   }
 
   const title = data.title || data.name;
-  const isTv = type === "tv" || data.first_air_date;
+  // Validasi tipe paling akurat berdasarkan struktur objek data yang dikembalikan TMDB
+  const isTv = data.first_air_date || type === "tv";
   
   // Rancang ulang URL tujuan agar mengarah ke format SEO baru kita: /movie/judul-id atau /movie/tv-judul-id
   const prefix = isTv ? "tv-" : "";
   const targetSlugId = `${prefix}${createSlug(title)}-${id}`;
 
-  // Ambil data video/trailer dari TMDB
+  // Ambil data video/trailer dari TMDB (Gunakan isTv yang sudah pasti valid)
   let videoData = null;
   try {
     videoData = await fetchTMDB(`/${isTv ? "tv" : "movie"}/${id}/videos`);
   } catch (e) {}
 
   const trailer = videoData?.results?.find(
-    (v) => v.type === "Trailer" && (v.site === "YouTube" || v.site === "Youtube")
+    (v) => v.type === "Trailer" && (v.site?.toLowerCase() === "youtube")
   );
 
   return (

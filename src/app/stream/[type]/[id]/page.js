@@ -1,24 +1,11 @@
+import Link from "next/link";
 import { fetchTMDB } from "@/api"; 
 
+// 1. KONFIGURASI KHUSUS CLOUDFLARE PAGES EDGE RUNTIME
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
-export default async function StreamPage({ params }) {
-  const { type, id } = await params;
-  
-  if (isNaN(id)) {
-    return { title: "Streaming Player - CINEVISIO" };
-  }
-
-  const data = await fetchTMDB(`/${type}/${id}`);
-  const title = data?.title || data?.name || "Content";
-  return {
-    title: `Watch ${title} Free HD Streaming - CINEVISIO`,
-    description: `Watch free streaming ${title} online with high quality servers on CINEVISIO.`,
-  };
-}
-
-// 2. KOMPONEN HALAMAN UTAMA PLAYER
+// 2. KOMPONEN HALAMAN UTAMA PLAYER (HANYA ADA SATU EXPORT DEFAULT)
 export default async function StreamPage({ params, searchParams }) {
   const { type, id } = await params;
   const sParams = await searchParams;
